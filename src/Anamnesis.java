@@ -1,27 +1,50 @@
-Import java.time.LocalDate;
+import java.time.LocalDate;
 
 public class Anamnesis {
   private String motivoConsulta, tipoAlimento, racion, heces, orina;
   private LocalDate ultimaVacunacion, ultimaDesparacitacion;
 
-  public Anamnesis(String motivoConsulta, String tipoAlimento, String racion, String heces, String orina, LocalDate ultimaVacunacion, LocalDate ultimaDesparacitacion) {
+  public Anamnesis(String motivoConsulta, String tipoAlimento, String racion, String heces, String orina, String ultimaVacunacion, String ultimaDesparacitacion) {
     this.motivoConsulta = motivoConsulta;
     this.tipoAlimento = tipoAlimento;
     this.racion = racion;
     this.heces = heces;
     this.orina = orina;
-    this.ultimaVacunacion = ultimaVacunacion;
-    this.ultimaDesparacitacion = ultimaDesparacitacion;
+    setUltimaVacunacion(ultimaVacunacion);
+    setUltimaDesparacitacion(ultimaDesparacitacion);
   }
 
-  public void imprimirInformacion() {
-    System.out.println("Motivo de Consulta: " + motivoConsulta);
-    System.out.println("Tipo de Alimento: " + tipoAlimento);
-    System.out.println("Ración: " + racion);
-    System.out.println("Heces: " + heces);
-    System.out.println("Orina: " + orina);
-    System.out.println("Vacunación: " + ultimaVacunacion);
-    System.out.println("Desparacitación: " + ultimaDesparacitacion);
+  public String getMotivoConsulta(){return motivoConsulta;}
+  public String getTipoAlimento(){return tipoAlimento;}
+  public String getRacion(){return racion;}
+  public String getHeces(){return heces;}
+  public String getOrina(){return orina;}
+
+  public void setUltimaDesparacitacion(String ultimaDesparacitacion) {
+    try{
+      this.ultimaDesparacitacion = LocalDate.parse(ultimaDesparacitacion);
+    }catch(Exception e){
+      System.out.println("Fecha inválida");
+    }
+  }
+
+  public void setUltimaVacunacion(String ultimaVacunacion) {
+    try{
+      this.ultimaVacunacion = LocalDate.parse(ultimaVacunacion);
+    }catch(Exception e){
+      System.out.println("Fecha inválida");
+    }
+  }
+
+  @Override
+  public String toString() {
+    return "Motivo de Consulta: " + motivoConsulta +
+            "\nTipo de Alimento: " + tipoAlimento +
+            "\nRación: " + racion +
+            "\nHeces: " + heces +
+            "\nOrina: " + orina +
+            "\nÚltima Vacunación: " + ultimaVacunacion +
+            "\nÚltima Desparacitación: " + ultimaDesparacitacion;
   }
   public boolean requiereVacunacion() {
     LocalDate fechaActual = LocalDate.now();

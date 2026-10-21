@@ -3,7 +3,7 @@ public class Servicio {
     private LocalDate fecha;
     private String tipoProcedimiento, descripcion, veterinario, resultado;
     private double costoBase;
-    public Servicio(LocalDate fecha, String tipoProcedimiento, String descripcion, String veterinario, String resultado, double costoBase) {
+    public Servicio(String tipoProcedimiento, String descripcion, String veterinario, String resultado, double costoBase) {
         this.fecha = LocalDate.now();
         this.tipoProcedimiento = tipoProcedimiento;
         this.descripcion = descripcion;
@@ -17,9 +17,6 @@ public class Servicio {
     public String getResultado(){return resultado;}
     public double getCostoBase(){return costoBase;}
 
-    public double obtenerCostoBase(){
-        return costoBase;
-    }
 
     public String imprimirDatos(){
         return "Fecha: "+fecha+
