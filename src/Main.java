@@ -9,7 +9,6 @@ public class Main {
 
     private static final Scanner sc = new Scanner(System.in);
     private static final Clinica clinica = new Clinica();
-    // La Clinica no guarda historias clínicas, así que se llevan aquí (una por mascota)
     private static final HashMap<Mascota, HistoriaClinica> historias = new HashMap<>();
     private static int contadorConsultas = 1;
     private static int contadorRecibos = 1;
@@ -138,7 +137,7 @@ public class Main {
 
         System.out.println("\n-- Examen clínico --");
         ExamenClinico examen = pedirExamen();
-        m.setPeso(examen.getPeso()); // mantiene actualizado el peso del paciente
+        m.setPeso(examen.getPeso());
 
         System.out.println("\n-- Diagnóstico y tratamiento --");
         String diagnostico = leer("Diagnóstico: ");
@@ -150,7 +149,6 @@ public class Main {
         contadorConsultas++;
         historia.agregarConsulta(consulta);
 
-        // Alertas
         System.out.println();
         if (consulta.hayAlerta(m.getEspecie())) {
             System.out.println("⚠ ALERTA: fiebre o constantes vitales fuera del rango normal.");
@@ -165,11 +163,9 @@ public class Main {
             System.out.println("ℹ Consulta en horario nocturno: se aplicará recargo del 20% a los servicios.");
         }
 
-        // Servicios (deben agregarse ANTES de generar el recibo, que los copia de la consulta)
         System.out.println("\n-- Servicios realizados --");
         agregarServiciosAConsulta(consulta, veterinario);
 
-        // Recibo
         Recibo recibo = consulta.generarRecibo(String.format("R-%04d", contadorRecibos), m.getTutor(), m);
         contadorRecibos++;
         clinica.registrarRecibo(recibo);
@@ -233,7 +229,6 @@ public class Main {
         }
     }
 
-    /** Muestra el catálogo y devuelve una COPIA del servicio elegido, o null si termina. */
     private static Servicio elegirServicio(ArrayList<Servicio> catalogo, String veterinario) {
         System.out.println("Catálogo de servicios:");
         for (int i = 0; i < catalogo.size(); i++) {
@@ -499,8 +494,7 @@ public class Main {
             if (!sc.hasNextLine()) return 1;
         }
     }
-
-    /** Devuelve una fecha en formato aaaa-mm-dd validada; si es opcional y se deja vacía devuelve null. */
+    
     private static String leerFecha(String etiqueta, boolean opcional) {
         while (true) {
             String s = leer(etiqueta + " (aaaa-mm-dd" + (opcional ? ", Enter si no aplica" : "") + "): ");
