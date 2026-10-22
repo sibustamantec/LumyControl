@@ -1,6 +1,8 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 public class Recibo {
+    private static final double RECARGO_NOCTURNO = 0.20;
+    private static final int VALOR_POR_PUNTO = 2000;
     private String numeroRecibo;
     private LocalDate fechaEmision;
     private Tutor tutor;
@@ -25,7 +27,7 @@ public class Recibo {
         this.totalFinal = 0;
         this.puntosGenerados = 0;
         this.pagado = false;
-        for(Servicio s : consulta.getServicios()){this.servicio.add(s);}
+        for(Servicio servicio : consulta.getServicios()){this.servicio.add(servicio);}
         actualizarTotales();
     }
     public String getNumeroRecibo(){return numeroRecibo;}
@@ -86,7 +88,6 @@ public class Recibo {
                 "\nNombre de la Mascota: "+ mascota.getNombre()+
                 "\nServicios: "+ getServicio() +
                 "\nProductos: "+ getProducto() +
-                //verificar si es necesario agregar el metodo imprimirDatos() en Servicio y LineaProducto para que se vea mejor
                 "\nPrecio Base: "+ costoBaseTotal +
                 "\nRecargo: +"+ recargo +
                 "\nDescuento: -"+ descuento +

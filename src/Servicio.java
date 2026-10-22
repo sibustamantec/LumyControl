@@ -9,16 +9,27 @@ public class Servicio {
         this.descripcion = descripcion;
         this.veterinario = veterinario;
         this.resultado = resultado;
+        setCostoBase(costoBase);
     }
     public LocalDate getFecha() {return fecha;}
-    public String tipoProcedimiento(){return tipoProcedimiento;}
-    public String getdescripcion(){return descripcion;}
+    public String getTipoProcedimiento(){return tipoProcedimiento;}
+    public String getDescripcion(){return descripcion;}
     public String getVeterinario(){return veterinario;}
     public String getResultado(){return resultado;}
     public double getCostoBase(){return costoBase;}
 
+    public void setVeterinario(String veterinario){this.veterinario = veterinario;}
+    public void setResultado(String resultado){this.resultado = resultado;}
+    public void setCostoBase(double costoBase){
+        if(costoBase >= 0){this.costoBase = costoBase;}
+        else{System.out.println("Costo inválido");}
+    }
 
-    public String imprimirDatos(){
+    public Servicio copiar(String veterinario){
+        return new Servicio(tipoProcedimiento, descripcion, veterinario, "", costoBase);
+    }
+
+    public String toString(){
         return "Fecha: "+fecha+
                 "\nTipo Procedimiento: "+tipoProcedimiento+
                 "\nDescripcion: "+descripcion+
@@ -27,5 +38,3 @@ public class Servicio {
                 "\nPrecio base: "+costoBase;
     }
 }
-//lo mismo que en lineaproductos, pero no me queda claro si es
-//necesario hacer la clase TipoProcedimiento

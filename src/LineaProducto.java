@@ -1,16 +1,28 @@
 public class LineaProducto {
     private Producto producto;
     private int cantidad;
+    private double precioUnitario;
     public LineaProducto(Producto producto, int cantidad){
         this.producto = producto;
-        this.cantidad = cantidad;
+        setCantidad(cantidad);
+        this.precioUnitario = producto.getPrecioVenta();
     }
-    public Product getProducto(){return producto;}
+    public Producto getProducto(){return producto;}
     public int getCantidad(){return cantidad;}
+    public double getPrecioUnitario(){return precioUnitario;}
+    public void setCantidad(int cantidad){
+        if(cantidad > 0){this.cantidad = cantidad;}
+        else{System.out.println("Cantidad inválida");}
+    }
 
     public double calcularSubtotal(){
-        return producto.getPrecioVenta()*cantidad;
+        return precioUnitario*cantidad;
+    }
+    public double calcularCostoCompra(){
+        return producto.getCostoCompra() * cantidad;
+    }
+    @Override
+    public String toString(){
+        return producto.getNombre() + " x" + cantidad + " (" + precioUnitario + " c/u) = " + calcularSubtotal();
     }
 }
-//Es necesario hacer una lista con Productos p que itere en todos los
-//productos que se agreguen para calcular el subtotal.

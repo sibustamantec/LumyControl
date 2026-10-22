@@ -26,6 +26,13 @@ public class ConsultaGeneral {
     this.servicios = new ArrayList<>();
   }
 
+  public String getNumeroConsulta() {return numeroConsulta;}
+  public LocalDateTime getFechaHora() {return fechaHora;}
+  public String getVeterinario() {return veterinario;}
+  public Anamnesis getAnamnesis() {return anamnesis;}
+  public ExamenClinico getExamenClinico() {return examenClinico;}
+  public ArrayList<Servicio> getServicios() {return servicios;}
+
   public void registrarAnamnesis(Anamnesis a) {this.anamnesis = a;}
   public void registrarExamenClinico(ExamenClinico e) {this.examenClinico = e;}
   public void modificarDiagnostico(String nuevoDiagnostico) {this.diagnostico = nuevoDiagnostico;}
@@ -39,14 +46,13 @@ public class ConsultaGeneral {
     "\nDiagnostico: " + diagnostico +
     "\nTratamiento: " + tratamiento;
   }
-
+  @Override
   public String toString() {
     return resumen() +
     "\nAnamnesis: \n" + anamnesis + 
     "\nExamen Clinico: \n" + examenClinico;
   }
 
-  public ArrayList<Servicio> getServicios() {return servicios;}
 
   public boolean esNocturno() {
     LocalTime hora = fechaHora.toLocalTime();
@@ -56,7 +62,6 @@ public class ConsultaGeneral {
   public boolean hayAlerta(String especie) {
     return (examenClinico != null)? examenClinico.evaluarConstantesVitales(especie) : false;
   }
-
 
   public Recibo generarRecibo(String numeroRecibo, Tutor tutor, Mascota mascota) {
 

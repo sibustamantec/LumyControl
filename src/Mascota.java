@@ -1,11 +1,13 @@
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 public class Mascota {
-    private String nombre, raza, temperamento, sexo, alimentacion, especie, color, estReproductivo, alergias, microchip;
+    private String nombre, raza, temperamento, sexo, alimentacion, especie, color, estReproductivo, microchip;
+    private ArrayList<String> alergias;
     private LocalDate fechaNacimiento;
     private double peso;
     private Tutor tutor;
-    public Mascota(Tutor tutor, String nombre, String raza, String temperamento,  String fechaNacimiento, String sexo, String alimentacion, String especie, String color, String estReproductivo, String alergias, String microchip, double peso){
+    public Mascota(Tutor tutor, String nombre, String raza, String temperamento,  String fechaNacimiento, String sexo, String alimentacion, String especie, String color, String estReproductivo,  String microchip, double peso){
         this.tutor = tutor;
         this.nombre = nombre;
         this.raza = raza;
@@ -16,7 +18,7 @@ public class Mascota {
         this.especie = especie;
         this.color = color;
         this.estReproductivo = estReproductivo;
-        this.alergias = alergias; // alergias se puede manejar como array en un futuro
+        this.alergias = new ArrayList<>();
         setPeso(peso);
         this.microchip = microchip;
     }
@@ -35,10 +37,12 @@ public class Mascota {
     public String getEspecie(){return especie;}
     public String getColor(){return color;}
     public String getEstReproductivo(){return estReproductivo;}
-    public String getAlergias(){return alergias;}
+    public ArrayList<String> getAlergias(){return alergias;}
+    public Tutor getTutor(){return tutor;}
     public double getPeso(){return peso;}
     public String getMicrochip(){return microchip;}
     public LocalDate getFechaNacimiento(){return fechaNacimiento;}
+
     public void setPeso(double peso) {
         if(peso>0){
             this.peso = peso;
@@ -49,12 +53,14 @@ public class Mascota {
     public void setEstReproductivo(String estReproductivo){
         this.estReproductivo = estReproductivo;
     }
-    //setAlergias() se usa así por el momento porque no estamos trabajando listas
-    public void setAlergias(String alergiasNuevas){
-        alergias +=  " " + alergiasNuevas;
-    }
     public void setAlimentacion(String alimentacion){
         this.alimentacion = alimentacion;
+    }
+    public void agregarAlergia(String alergia){
+        if(alergia != null && !alergia.isBlank() && !alergias.contains(alergia)){alergias.add(alergia);}
+    }
+    public boolean eliminarAlergia(String alergia){
+        return alergias.remove(alergia);
     }
     public String calcularEdad(){
         LocalDate hoy = LocalDate.now();
