@@ -22,7 +22,7 @@ LumyControl es una aplicación de consola escrita en **Java** que ofrece a las v
 | Nombre | Rol | GitHub |
 |---|---|---|
 | Sindy Tatiana Bustamante Cardenas | Desarrolladora | sibustamantec |
-| Joel Emmanuel García Góngora | Dearrollador | JGarcia734 |
+| Joel Emmanuel García Góngora | Presente | JGarcia734 |
 | Marlon Steven Montes Arguello | Presente | mmontesar |
 | Andrey Santiago García Perilla | Desarrollador | AndGarcia-Unal | 
 | Manuel Felipe Reyes Gutiérrez | Desarrollador | mareyesgu |
