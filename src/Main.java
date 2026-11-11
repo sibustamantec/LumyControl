@@ -29,8 +29,9 @@ public class Main {
                 case 6 -> registrarServicioCatalogo();
                 case 7 -> registrarGastoInsumo();
                 case 8 -> consultarTutor();
-                case 9 -> System.out.println("\n" + clinica.generarCierreDelDia());
-                case 10 -> iniciarNuevoDia();
+                case 9 -> menuJaulas();
+                case 10 -> System.out.println("\n" + clinica.generarCierreDelDia());
+                case 11 -> iniciarNuevoDia();
                 case 0 -> System.out.println("Hasta pronto.");
                 default -> System.out.println("Opción inválida.");
             }
@@ -49,8 +50,9 @@ public class Main {
                  6. Registrar servicio en el catálogo
                  7. Registrar gasto de insumo
                  8. Consultar tutor y sus mascotas
-                 9. Cierre del día
-                10. Iniciar nuevo día
+                 9. Jaulas
+                10. Cierre del día
+                11. Iniciar nuevo día
                  0. Salir
                 --------------------------------------""");
     }
@@ -426,6 +428,39 @@ public class Main {
         System.out.println("Mascotas:");
         for (Mascota m : t.getMascotas()) {
             System.out.println("  - " + m.getNombre() + " (" + m.getEspecie() + ", " + m.calcularEdad() + ")");
+        }
+    }
+
+
+    private static void menuJaulas() {
+        System.out.println(clinica.mostrarCuadricula());
+        System.out.println("1.Consultar jaula  2.Hospitalizar paciente  3.Dar alta  4.Adecuar jaula");
+        int opcion = leerEntero("Opción: ");
+        if (opcion < 1 || opcion > 4) {
+            System.out.println("Opción inválida.");
+            return;
+        }
+        switch (opcion){
+            case 1 -> {
+            int fila = leerEntero("Fila de la jaula: ") - 1;
+            int columna = leerEntero("Columna de la jaula: ") - 1;
+                System.out.println(clinica.consultarJaula(fila, columna));
+            }
+            case 2 -> {
+            int fila = leerEntero("Fila de la jaula: ") - 1;
+            int columna = leerEntero("Columna de la jaula: ") - 1;
+                Mascota paciente = seleccionarMascota();
+                    System.out.println(clinica.hospitalizarPaciente(paciente, fila, columna));
+                }
+            case 3 -> {
+                Mascota paciente = seleccionarMascota();
+                System.out.println(clinica.darAltaPaciente(paciente));
+                }
+            case 4 -> {
+            int fila = leerEntero("Fila de la jaula: ") - 1;
+            int columna = leerEntero("Columna de la jaula: ") - 1;
+                System.out.println(clinica.adecuarJaula(fila, columna));
+            }
         }
     }
 

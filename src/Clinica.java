@@ -10,6 +10,7 @@ public class Clinica {
     private ArrayList<Recibo> recibos;
     private ArrayList<ConsultaGeneral> consultasDelDia;
     private ArrayList<LineaProducto> insumosGastados; // insumos usados en el día, para el cierre
+    private Jaula[][] jaulas; // Matriz de jaulas: 2 filas x 5 columnas
 
     public Clinica(){
         tutores = new ArrayList<>();
@@ -19,6 +20,12 @@ public class Clinica {
         recibos = new ArrayList<>();
         consultasDelDia = new ArrayList<>();
         insumosGastados = new ArrayList<>();
+        jaulas = new Jaula[2][5];
+        for(int i = 0; i < jaulas.length; i++){
+            for(int j = 0; j < jaulas[i].length; j++){
+                jaulas[i][j] = new Jaula(i, j);
+            }
+        }
     }
 
     public ArrayList<Tutor> getTutores(){return tutores;}
@@ -176,5 +183,91 @@ public class Clinica {
     public void iniciarNuevoDia(){
         consultasDelDia.clear();
         insumosGastados.clear();
+    }
+
+    //Matriz de jaulas: 2 filas x 5 columnas
+
+    public int getCantidadFilasJaulas(){return jaulas.length;}
+    public int getCantidadColumnasJaulas(){return jaulas[0].length;}
+
+    public Jaula buscarJaula(int fila, int columna){
+        if(fila < 0 || fila >= jaulas.length || columna < 0 || columna >= jaulas[0].length){
+            return null;
+        }
+        return jaulas[fila][columna];
+    }
+
+    public Jaula buscarMascotaEnJaula(Mascota m){
+        for(int i = 0; i < jaulas.length; i++){
+            for(int j = 0; j < jaulas[i].length; j++){
+                Jaula jActual = jaulas[i][j];
+                if(jActual.getPaciente() != null && jActual.getPaciente().equals(m)){
+                    return jActual;
+                }
+            }
+        }
+        return null;
+    }
+
+    public String mostrarCuadricula(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("==== JAULAS ====\n");
+        for(int i = 0; i < jaulas.length; i++){
+            for(int j = 0; j < jaulas[i].length; j++){
+                Jaula jActual = jaulas[i][j];
+                sb.append("[").append(jActual.getEstadoChar()).append("]");
+            }
+            sb.append("\n");
+        }
+        sb.append("L: Libre, O: Ocupada, S: Sin adecuar\n");
+        return sb.toString();
+    }
+
+    public String hospitalizarPaciente(Mascota paciente, int fila, int columna){
+        if(paciente == null){
+            return "Paciente inválido.";
+        }
+        Jaula jaula = buscarJaula(fila, columna);
+        if(jaula == null){
+            return "Jaula no encontrada.";
+        }
+        Jaula actual = buscarMascotaEnJaula(paciente);
+        if(actual != null && actual != jaula){
+            return "La mascota ya está hospitalizada en otra jaula.";
+        }
+        if(!jaula.getEstado().equalsIgnoreCase("libre")){
+            return "La jaula no está libre.";
+        }
+        jaula.ocuparJaula(paciente);
+        return "Paciente hospitalizado en la jaula [" + (fila + 1) + "," + (columna + 1) + "].";
+        
+    }
+    public String darAltaPaciente(Mascota paciente){
+        Jaula jaula = buscarMascotaEnJaula(paciente);
+        if(jaula == null){
+            return "La mascota no está hospitalizada.";
+        }
+        jaula.liberarJaula();
+        return "Paciente dado de alta de la jaula [" + (jaula.getFila() + 1) + "," + (jaula.getColumna() + 1) + "].";
+    }
+    
+    public String adecuarJaula(int fila, int columna){
+        Jaula jaula = buscarJaula(fila, columna);
+        if(jaula == null){
+            return "Jaula no encontrada.";
+        }
+        if(!jaula.getEstado().equalsIgnoreCase("sin adecuar")){
+            return "La jaula está en estado "+ jaula.getEstado() + ".";
+        }
+        jaula.adecuarJaula();
+        return "Jaula [" + (fila + 1) + "," + (columna + 1) + "] preparada.";
+    }
+
+    public String consultarJaula(int fila, int columna){
+        Jaula jaula = buscarJaula(fila, columna);
+        if(jaula == null){
+            return "Jaula no encontrada.";
+        }
+        return jaula.toString();
     }
 }
