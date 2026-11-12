@@ -224,6 +224,13 @@ public class Main {
         while (true) {
             Servicio s = elegirServicio(catalogo, veterinario);
             if (s == null) break;
+            if (s.requiereConsentimiento()) {
+                System.out.println("⚠ Este servicio requiere consentimiento del tutor.");
+                if (!leerSiNo("¿El tutor da su consentimiento?")) {
+                    System.out.println("Servicio omitido: Falta autorización.");
+                    continue;
+                }
+            }
             String resultado = leer("Resultado (Enter para omitir): ");
             if (!resultado.isEmpty()) s.setResultado(resultado);
             consulta.agregarServicio(s);
@@ -235,7 +242,7 @@ public class Main {
         System.out.println("Catálogo de servicios:");
         for (int i = 0; i < catalogo.size(); i++) {
             Servicio s = catalogo.get(i);
-            System.out.println("  " + (i + 1) + ". " + s.getTipoProcedimiento() + " - $" + s.getCostoBase());
+            System.out.println("  " + (i + 1) + ". " + s.getTipoProcedimiento() + " - $" + s.calcularCostoServiciosTotal());
         }
         int op = leerEntero("Número de servicio (0 para terminar): ");
         if (op == 0) return null;
@@ -395,16 +402,54 @@ public class Main {
         }
         if (!hay) System.out.println("  (sin productos)");
     }
-
-
     private static void registrarServicioCatalogo() {
-        String tipo = leerObligatorio("Tipo de procedimiento (ej. Consulta general, Ecografía): ");
+        System.out.println("Tipo: 1. Consulta especializada  2. Procedimiento quirúrgico  3. Preventivo");
+        int tipo = leerEntero("Opción: ");
+        String nombre;
         String descripcion = leer("Descripción: ");
         double costo = leerDoublePositivo("Costo base: ");
-        clinica.registrarServicio(new Servicio(tipo, descripcion, "", "", costo));
+
+        Servicio s = null;
+        switch (tipo) {
+            case 1 -> {;
+                String especialidad = leer("Especialidad: ");
+                String motivoRemisión = leer("Motivo de remisión: ");
+                String procedimientosEspeciales = leer("Procedimientos especiales: ");
+                double costoProcedimientosEspeciales = leerDoublePositivo("Precio procedimientos especiales: ");
+                boolean intrusivo = leerSiNo("¿Son procedimientos intrusivos?");
+                nombre = "Consulta especializada - "+ especialidad;
+                s = new ConsultaEspecializada(nombre, descripcion, "", "", costo, especialidad, motivoRemisión, procedimientosEspeciales, costoProcedimientosEspeciales, intrusivo);
+            }
+            case 2 -> {
+                nombre = "Procedimiento quirúrgico";
+                String nivelRiesgo = leer("Nivel de riesgo: ");
+                boolean urgencia = leerSiNo("¿Es urgencia?");
+                String tipoAnestesia = leer("Tipo de anestesia: ");
+                int tiempoEstimadoMin = leerEntero("Duración estimada (min): ");
+                int horasHospitalizacion = leerEntero("Horas en cuidados: ");
+                int diasRecuperacion = leerEntero("Días de recuperación: ");
+                s = new ProcedimientoQuirurgico(nombre, descripcion,"", "", costo, nivelRiesgo, tipoAnestesia, urgencia, tiempoEstimadoMin, horasHospitalizacion, diasRecuperacion);
+            }
+            case 3 -> {
+                System.out.println("Tipo de preventivo: 1. Vacunación  2. Desparasitación");
+                int tipoPreventivoOpcion = leerEntero("Opción: ");
+                if (tipoPreventivoOpcion != 1 && tipoPreventivoOpcion != 2) {
+                    System.out.println("Opción inválida.");
+                    return;
+                }
+                nombre = "Servicio preventivo: " + (tipoPreventivoOpcion == 1 ? "Vacunación" : "Desparasitación");
+                String tipoPreventivo = leer("Tipo de preventivo (Vacunación/Desparasitación): ");
+                String medicamento = leer("Nombre del medicamento: ");
+                String dosis = leer("Dosis: ");
+                s = new ServicioPreventivo(nombre, descripcion, "", "", costo, tipoPreventivo, medicamento, dosis);
+            }
+            default -> { System.out.println("Opción inválida."); return; }
+        }
+        clinica.registrarServicio(s);
         System.out.println("Servicio agregado al catálogo.");
     }
 
+    
     private static void registrarGastoInsumo() {
         System.out.println("\nInsumos disponibles:");
         listarProductos(Producto.Tipo.INSUMO);

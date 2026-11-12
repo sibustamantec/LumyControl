@@ -1,5 +1,5 @@
 import java.time.LocalDate;
-public class Servicio {
+public abstract class Servicio {
     private LocalDate fecha;
     private String tipoProcedimiento, descripcion, veterinario, resultado;
     private double costoBase;
@@ -25,16 +25,24 @@ public class Servicio {
         else{System.out.println("Costo inválido");}
     }
 
-    public Servicio copiar(String veterinario){
-        return new Servicio(tipoProcedimiento, descripcion, veterinario, "", costoBase);
+    public double calcularCostoServiciosTotal(){
+        return costoBase;
     }
 
+    public abstract boolean requiereConsentimiento();
+
+    public abstract Servicio copiar(String veterinario);
+
+
+    @Override 
     public String toString(){
         return "Fecha: "+fecha+
                 "\nTipo Procedimiento: "+tipoProcedimiento+
                 "\nDescripcion: "+descripcion+
                 "\nVeterinario: "+veterinario+
                 "\nResultado: "+resultado+
-                "\nPrecio base: "+costoBase;
+                "\nPrecio base: "+costoBase+
+                "\nCosto total: "+calcularCostoServiciosTotal()+
+                "\nRequiere consentimiento: "+requiereConsentimiento();
     }
 }

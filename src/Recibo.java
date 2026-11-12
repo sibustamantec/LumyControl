@@ -48,7 +48,7 @@ public class Recibo {
 
     public double calcularCostoBaseTotal(){
         double total = 0;
-        for(Servicio s : servicio){total += s.getCostoBase();}
+        for(Servicio s : servicio){total += s.calcularCostoServiciosTotal();}
         for(LineaProducto p : producto){total += p.calcularSubtotal();}
         return total;
     }
@@ -60,7 +60,7 @@ public class Recibo {
         if (!consulta.esNocturno()){return recargo;}
         double costoServicios = 0;
         for(Servicio s : servicio){
-            costoServicios += s.getCostoBase();
+            costoServicios += s.calcularCostoServiciosTotal();
         }
         recargo =  costoServicios * 0.20;
         return recargo;

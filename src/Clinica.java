@@ -144,7 +144,7 @@ public class Clinica {
                     costoCompra += l.calcularCostoCompra();
                 }
                 for(Servicio s : r.getServicio()){
-                    ingresosServicios += s.getCostoBase();
+                    ingresosServicios += s.calcularCostoServiciosTotal();
                 }
                 totalRecaudado += r.getTotalFinal();
             }

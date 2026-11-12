@@ -21,7 +21,7 @@ public class Tutor {
     public ArrayList<Mascota> getMascotas() {return mascotas;}
 
     public void setNombre(String nombre){this.nombre = nombre;}
-    public void setDocumento(){this.documento = documento;}
+    public void setDocumento(String documento){this.documento = documento;}
     public void setDireccion(String direccion) {this.direccion = direccion;}
     public void setCorreo(String correo) {this.correo = correo;}
     public void setTelefono(String telefono) {this.telefono = telefono;}
@@ -43,7 +43,7 @@ public class Tutor {
         if (puntosFidelidad == 0){return 0;}
         else if (puntosFidelidad >= 50 && puntosFidelidad <= 99){descuento = 0.05;}
         else if (puntosFidelidad >= 100 && puntosFidelidad <= 200){descuento = 0.1;}
-        else if (puntosFidelidad >= 200){descuento = 0.15;}
+        else if (puntosFidelidad > 200){descuento = 0.15;}
         return descuento;
     }
     public void agregarMascota(Mascota mascota){
