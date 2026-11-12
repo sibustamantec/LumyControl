@@ -37,6 +37,7 @@ LumyControl es una aplicación de consola escrita en **Java** que ofrece a las v
 - **Programa de fidelidad:** los tutores acumulan puntos con cada pago y obtienen descuentos.
 - **Inventario:** control de productos de venta e insumos de la clínica, con reabastecimiento y alerta de stock bajo.
 - **Catálogo de servicios:** definición de los servicios que ofrece la clínica y su costo base.
+- **Matriz de Jaulas** visualiza el estado de cada jaula con la opción de modificarlas
 - **Cierre del día:** resumen de consultas, pacientes atendidos, ventas, utilidad, ingresos, insumos gastados y productos con stock bajo.
 
 ## Reglas de negocio
@@ -49,6 +50,7 @@ LumyControl es una aplicación de consola escrita en **Java** que ofrece a las v
 | Vacunación | Se requiere si no hay registro o pasó más de 1 año |
 | Desparasitación | Se requiere si no hay registro o pasaron más de 3 meses |
 | Recargo nocturno | 20 % sobre los servicios en consultas entre las 20:00 y las 06:00 |
+| Recargo Urgencia | 30 % para procedimientos quirúrgicos de emergencia |
 | Puntos de fidelidad | 1 punto por cada $2.000 del costo base, al pagar el recibo |
 | Descuento por fidelidad | 5 % (50-99 puntos), 10 % (100-199), 15 % (200 o más) |
 | Stock bajo | Cuando la cantidad es menor o igual al stock mínimo |
@@ -85,18 +87,22 @@ java Main
 ```
 LumyControl/
 ├── src/
-│   ├── Main.java            # Menú y lógica de interacción con el usuario
-│   ├── Clinica.java         # Clase central: tutores, mascotas, inventario, recibos y cierre
-│   ├── Tutor.java           # Propietario de las mascotas y puntos de fidelidad
-│   ├── Mascota.java         # Paciente
-│   ├── HistoriaClinica.java # Historial de consultas de una mascota
-│   ├── ConsultaGeneral.java # Consulta médica
-│   ├── Anamnesis.java       # Datos reportados por el tutor
-│   ├── ExamenClinico.java   # Constantes vitales y examen por sistemas
-│   ├── Servicio.java        # Procedimiento del catálogo
-│   ├── Producto.java        # Producto de venta o insumo
-│   ├── LineaProducto.java   # Producto y cantidad dentro de un recibo
-│   └── Recibo.java          # Facturación, recargos, descuentos y pago
+│   ├── Main.java                    # Menú y lógica de interacción con el usuario
+│   ├── Clinica.java                 # Clase central: tutores, mascotas, inventario, recibos y cierre
+│   ├── Tutor.java                   # Propietario de las mascotas y puntos de fidelidad
+│   ├── Mascota.java                 # Paciente
+│   ├── HistoriaClinica.java         # Historial de consultas de una mascota
+│   ├── ConsultaGeneral.java         # Consulta médica
+│   ├── Anamnesis.java               # Datos reportados por el tutor
+│   ├── ExamenClinico.java           # Constantes vitales y examen por sistemas
+│   ├── Servicio.java                # Procedimiento del catálogo
+│   ├── consultaEspecializada.java   # Consultas y procedimientos especiales
+│   ├── procedimientoQuirúrgico.java # Proceso y recuperación
+│   ├── ServicioPreventivo.java      # Medicamentos, dosis y próxima aplicación
+│   ├── Producto.java                # Producto de venta o insumo
+│   ├── LineaProducto.java           # Producto y cantidad dentro de un recibo
+│   ├── Jaulas.java                  # Posición, estado, paciente
+│   └── Recibo.java                  # Facturación, recargos, descuentos y pago
 ├── .gitignore
 └── README.md
 ```
@@ -115,15 +121,16 @@ Al iniciar, el programa muestra el siguiente menú:
  6. Registrar servicio en el catálogo
  7. Registrar gasto de insumo
  8. Consultar tutor y sus mascotas
- 9. Cierre del día
-10. Iniciar nuevo día
+ 9. Jaulas
+10. Cierre del día
+11. Iniciar nuevo día
  0. Salir
 --------------------------------------
 ```
 
 **Flujo recomendado la primera vez:**
 
-1. **Opción 6:** registrar al menos un servicio en el catálogo (ej. "Consulta general").
+1. **Opción 6:** registrar al menos un servicio en el catálogo (ej. "Cirugía").
 2. **Opción 5:** registrar productos o insumos en el inventario (opcional).
 3. **Opción 1:** registrar un tutor y su mascota.
 4. **Opción 2:** crear una consulta. Se pide anamnesis, examen clínico, diagnóstico y tratamiento; luego se agregan servicios y productos, y se genera el recibo.
