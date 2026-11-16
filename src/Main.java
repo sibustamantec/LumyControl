@@ -260,11 +260,10 @@ public class Main {
         }
         listarProductos(Producto.Tipo.VENTA);
         while (true) {
-            String codigo = leer("Código del producto (Enter para terminar): ");
+            String codigo = leer("Código o nombre del producto (Enter para terminar): ");
             if (codigo.isEmpty()) break;
-            Producto p = clinica.buscarProducto(codigo);
+            Producto p = elegirProducto(codigo, Producto.Tipo.VENTA);
             if (p == null) {
-                System.out.println("Producto no encontrado.");
                 continue;
             }
             if (p.getTipo() != Producto.Tipo.VENTA) {
@@ -364,10 +363,8 @@ public class Main {
             }
             case 2 -> registrarProducto();
             case 3 -> {
-                Producto p = clinica.buscarProducto(leerObligatorio("Código del producto: "));
-                if (p == null) {
-                    System.out.println("Producto no encontrado.");
-                } else {
+                Producto p = elegirProducto(leerObligatorio("Código o nombre del producto: "), null);
+                if (p != null) {
                     p.agregarCantidad(leerEntero("Cantidad a agregar: "));
                     System.out.println(p.getNombre() + " ahora tiene " + p.getCantidad() + " unidades.");
                 }
@@ -453,9 +450,10 @@ public class Main {
     private static void registrarGastoInsumo() {
         System.out.println("\nInsumos disponibles:");
         listarProductos(Producto.Tipo.INSUMO);
-        String codigo = leerObligatorio("Código del insumo: ");
+        Producto insumo = elegirProducto(leerObligatorio("Código o nombre del insumo: "), Producto.Tipo.INSUMO);
+        if (insumo == null) return;
         int cantidad = leerEntero("Cantidad gastada: ");
-        if (clinica.registrarGastoInsumo(codigo, cantidad)) {
+        if (clinica.registrarGastoInsumo(insumo.getCodigo(), cantidad)) {
             System.out.println("Gasto registrado.");
         }
     }
@@ -520,10 +518,48 @@ public class Main {
     private static Mascota seleccionarMascota() {
         String dato = leerObligatorio("Microchip o nombre de la mascota: ");
         Mascota m = clinica.buscarMascota(dato);
-        if (m == null) {
+        if (m != null){return m;}
+        ArrayList<Mascota> coincidencias = clinica.buscarMascotasParcial(dato);
+        if (coincidencias.isEmpty()) {
             System.out.println("Mascota no encontrada. Regístrela primero (opción 1).");
+            return null;
         }
-        return m;
+        if (coincidencias.size() == 1) {
+            Mascota unica = coincidencias.get(0);
+            System.out.println("Coincidencia: " + unica.ficha());
+            return leerSiNo("¿Es esta mascota?") ? unica : null;
+        }
+        System.out.println("Se encontraron " + coincidencias.size() + " coincidencias:");
+        for (int i = 0; i < coincidencias.size(); i++) {
+            System.out.println("  " + (i + 1) + ". " + coincidencias.get(i).ficha());
+        }
+        int op = leerEntero("Elija una (0 para cancelar): ");
+        if (op < 1 || op > coincidencias.size()) return null;
+        return coincidencias.get(op - 1);
+    }
+
+    private static Producto elegirProducto(String texto, Producto.Tipo tipo) {
+        Producto exacto = clinica.buscarProducto(texto);
+        if (exacto != null) return exacto;
+
+        ArrayList<Producto> coincidencias = clinica.buscarProductosParcial(texto, tipo);
+        if (coincidencias.isEmpty()) {
+            System.out.println("Producto no encontrado.");
+            return null;
+        }
+        if (coincidencias.size() == 1) {
+            Producto unico = coincidencias.get(0);
+            System.out.println("Coincidencia: [" + unico.getCodigo() + "] " + unico.getNombre() + " | stock: " + unico.getCantidad());
+            return leerSiNo("¿Es este producto?") ? unico : null;
+        }
+        System.out.println("Se encontraron " + coincidencias.size() + " coincidencias:");
+        for (int i = 0; i < coincidencias.size(); i++) {
+            Producto p = coincidencias.get(i);
+            System.out.println("  " + (i + 1) + ". [" + p.getCodigo() + "] " + p.getNombre() + " | stock: " + p.getCantidad());
+        }
+        int op = leerEntero("Elija uno (0 para cancelar): ");
+        if (op < 1 || op > coincidencias.size()) return null;
+        return coincidencias.get(op - 1);
     }
 
     private static String leer(String mensaje) {

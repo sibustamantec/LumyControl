@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.text.Normalizer;
 
 public class Clinica {
     private ArrayList<Tutor> tutores;
@@ -119,6 +120,39 @@ public class Clinica {
             if(p.getCodigo().equals(codigo)){return p;}
         }
         return null;
+    }
+
+    private static String normalizar(String s){
+        if(s == null){return "";}
+        return Normalizer.normalize(s, Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase().trim();
+    }
+
+    private static boolean contieneTodas(String texto, String consulta){
+        String base = normalizar(texto);
+        String q = normalizar(consulta);
+        if(q.isEmpty()){return false;}
+        for(String palabra : q.split("\\s+")){
+            if(!base.contains(palabra)){return false;}
+        }
+        return true;
+    }
+
+    public ArrayList<Mascota> buscarMascotasParcial(String texto){
+        ArrayList<Mascota> resultado = new ArrayList<>();
+        for(Mascota m : mascotas){
+            String chip = m.getMicrochip() == null ? "" : m.getMicrochip();
+            if(contieneTodas(m.getNombre() + " " + chip, texto)){resultado.add(m);}
+        }
+        return resultado;
+    }
+
+    public ArrayList<Producto> buscarProductosParcial(String texto, Producto.Tipo tipo){
+        ArrayList<Producto> resultado = new ArrayList<>();
+        for(Producto p : productos){
+            if(tipo != null && p.getTipo() != tipo){continue;}
+            if(contieneTodas(p.getNombre() + " " + p.getCodigo(), texto)){resultado.add(p);}
+        }
+        return resultado;
     }
 
     public Servicio buscarServicio(String tipoProcedimiento){
