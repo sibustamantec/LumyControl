@@ -37,7 +37,7 @@ LumyControl es una aplicación de consola escrita en **Java** que ofrece a las v
 - **Programa de fidelidad:** los tutores acumulan puntos con cada pago y obtienen descuentos.
 - **Inventario:** control de productos de venta e insumos de la clínica, con reabastecimiento y alerta de stock bajo.
 - **Catálogo de servicios:** definición de los servicios que ofrece la clínica y su costo base.
-- **Matriz de Jaulas** visualiza el estado de cada jaula con la opción de modificarlas
+- **Matriz de Jaulas:** visualiza el estado de cada jaula con la opción de modificarlas.
 - **Cierre del día:** resumen de consultas, pacientes atendidos, ventas, utilidad, ingresos, insumos gastados y productos con stock bajo.
 
 ## Reglas de negocio
