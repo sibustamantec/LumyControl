@@ -135,7 +135,7 @@ Al iniciar, el programa muestra el siguiente menú:
 3. **Opción 1:** registrar un tutor y su mascota.
 4. **Opción 2:** crear una consulta. Se pide anamnesis, examen clínico, diagnóstico y tratamiento; luego se agregan servicios y productos, y se genera el recibo.
 5. **Opción 4:** consultar o pagar los recibos pendientes.
-6. **Opción 9:** ver el cierre del día y, después, **opción 10** para iniciar un nuevo día.
+6. **Opción 10:** ver el cierre del día y, después, **opción 11** para iniciar un nuevo día.
 
 **Notas:**
 - Las mascotas se buscan por **microchip o nombre**.
